@@ -132,11 +132,6 @@ namespace TaskManagement.Forms
             await LoadTasksAsync();
         }
 
-        private void LvTasks_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //UpdateButtonStates();
-        }
-
         private void UpdateButtonStates()
         {
             bool hasSelection = lvTasks.SelectedItems.Count > 0;
