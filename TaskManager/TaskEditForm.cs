@@ -10,12 +10,7 @@ namespace TaskManagement.Forms
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private TaskItem? _currentTask;
 
-        private TextBox txtTitle;
-        private TextBox txtDescription;
-        private ComboBox cbPriority;
-        private CheckBox chkCompleted;
-        private Button btnSave;
-        private Button btnCancel;
+
 
         public TaskEditForm(ITaskService taskService)
         {
@@ -23,100 +18,7 @@ namespace TaskManagement.Forms
             InitializeComponent();
         }
 
-        private void InitializeComponent()
-        {
-            this.Text = "Редактирование задачи";
-            this.Size = new Size(500, 300);
-            this.StartPosition = FormStartPosition.CenterParent;
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
 
-            // Title
-            var lblTitle = new Label
-            {
-                Text = "Название:",
-                Location = new Point(10, 15),
-                Size = new Size(80, 23)
-            };
-
-            txtTitle = new TextBox
-            {
-                Location = new Point(100, 15),
-                Size = new Size(350, 23)
-            };
-
-            // Description
-            var lblDescription = new Label
-            {
-                Text = "Описание:",
-                Location = new Point(10, 50),
-                Size = new Size(80, 23)
-            };
-
-            txtDescription = new TextBox
-            {
-                Location = new Point(100, 50),
-                Size = new Size(350, 80),
-                Multiline = true,
-                ScrollBars = ScrollBars.Vertical
-            };
-
-            // Priority
-            var lblPriority = new Label
-            {
-                Text = "Приоритет:",
-                Location = new Point(10, 145),
-                Size = new Size(80, 23)
-            };
-
-            cbPriority = new ComboBox
-            {
-                Location = new Point(100, 145),
-                Size = new Size(120, 23),
-                DropDownStyle = ComboBoxStyle.DropDownList
-            };
-            cbPriority.Items.AddRange(new[] { "Низкий", "Средний", "Высокий" });
-
-            // Completed
-            chkCompleted = new CheckBox
-            {
-                Text = "Выполнено",
-                Location = new Point(100, 180),
-                Size = new Size(100, 23)
-            };
-
-            // Buttons
-            btnSave = new Button
-            {
-                Text = "Сохранить",
-                Location = new Point(280, 220),
-                Size = new Size(80, 30),
-                DialogResult = DialogResult.OK
-            };
-            btnSave.Click += BtnSave_Click;
-
-            btnCancel = new Button
-            {
-                Text = "Отмена",
-                Location = new Point(370, 220),
-                Size = new Size(80, 30),
-                DialogResult = DialogResult.Cancel
-            };
-
-            // Add controls
-            this.Controls.AddRange(new Control[]
-            {
-                lblTitle, txtTitle,
-                lblDescription, txtDescription,
-                lblPriority, cbPriority,
-                chkCompleted,
-                btnSave, btnCancel
-            });
-
-            this.AcceptButton = btnSave;
-            this.CancelButton = btnCancel;
-        }
 
         public void SetTask(TaskItem task)
         {
@@ -127,7 +29,7 @@ namespace TaskManagement.Forms
             chkCompleted.Checked = task.IsCompleted;
         }
 
-        private async void BtnSave_Click(object sender, EventArgs e)
+        private async void btnSave_Click(object sender, EventArgs e)
         {
             try
             {
@@ -148,7 +50,7 @@ namespace TaskManagement.Forms
                         chkCompleted.Checked
                     );
 
-                    _logger.Info("Task updated successfully from edit form: {TaskId}", _currentTask.Id);
+                    _logger.Info("задача успешно обновлена", _currentTask.Id);
                 }
             }
             catch (Exception ex)
@@ -158,5 +60,6 @@ namespace TaskManagement.Forms
                 this.DialogResult = DialogResult.None;
             }
         }
+
     }
 }

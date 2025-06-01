@@ -15,6 +15,11 @@ namespace TaskManagement
         [STAThread]
         static void Main()
         {
+            string logDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs");
+            if (!Directory.Exists(logDir))
+            {
+                Directory.CreateDirectory(logDir);
+            }
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
@@ -26,8 +31,8 @@ namespace TaskManagement
                 context.Database.EnsureCreated();
             }
 
-            var mainForm = host.Services.GetRequiredService<MainForm>();
-            Application.Run(mainForm);
+            var form1 = host.Services.GetRequiredService<Form1>();
+            Application.Run(form1);
         }
 
         static IHostBuilder CreateHostBuilder() =>
@@ -46,7 +51,7 @@ namespace TaskManagement
                     services.AddScoped<ITaskService, TaskService>();
 
                     // Forms
-                    services.AddTransient<MainForm>();
+                    services.AddTransient<Form1>();
                     services.AddTransient<TaskEditForm>();
                 });
     }
