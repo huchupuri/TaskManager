@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using NLog;
 using TaskManagement.Models;
 using TaskManagement.Repositories;
 
@@ -7,23 +7,22 @@ namespace TaskManagement.Services
     public class TaskService : ITaskService
     {
         private readonly ITaskRepository _taskRepository;
-        private readonly ILogger<TaskService> _logger;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public TaskService(ITaskRepository taskRepository, ILogger<TaskService> logger)
+        public TaskService(ITaskRepository taskRepository)
         {
             _taskRepository = taskRepository;
-            _logger = logger;
         }
 
         public async Task<IEnumerable<TaskItem>> GetAllTasksAsync()
         {
-            _logger.LogInformation("Getting all tasks");
+            _logger.Info("Getting all tasks");
             return await _taskRepository.GetAllAsync();
         }
 
         public async Task<TaskItem?> GetTaskByIdAsync(int id)
         {
-            _logger.LogInformation("Getting task by ID: {TaskId}", id);
+            _logger.Info("Getting task by ID: {TaskId}", id);
             return await _taskRepository.GetByIdAsync(id);
         }
 
@@ -34,7 +33,7 @@ namespace TaskManagement.Services
                 throw new ArgumentException("Task title cannot be empty", nameof(title));
             }
 
-            _logger.LogInformation("Creating new task: {TaskTitle}", title);
+            _logger.Info("Creating new task: {TaskTitle}", title);
 
             var task = new TaskItem
             {
@@ -54,7 +53,7 @@ namespace TaskManagement.Services
                 throw new ArgumentException("Task title cannot be empty", nameof(title));
             }
 
-            _logger.LogInformation("Updating task: {TaskId}", id);
+            _logger.Info("Updating task: {TaskId}", id);
 
             var existingTask = await _taskRepository.GetByIdAsync(id);
             if (existingTask == null)
@@ -76,13 +75,13 @@ namespace TaskManagement.Services
 
         public async Task<bool> DeleteTaskAsync(int id)
         {
-            _logger.LogInformation("Deleting task: {TaskId}", id);
+            _logger.Info("Deleting task: {TaskId}", id);
             return await _taskRepository.DeleteAsync(id);
         }
 
         public async Task<bool> ToggleTaskCompletionAsync(int id)
         {
-            _logger.LogInformation("Toggling task completion: {TaskId}", id);
+            _logger.Info("Toggling task completion: {TaskId}", id);
 
             var task = await _taskRepository.GetByIdAsync(id);
             if (task == null)
@@ -102,7 +101,7 @@ namespace TaskManagement.Services
                 return await GetAllTasksAsync();
             }
 
-            _logger.LogInformation("Searching tasks: {SearchTerm}", searchTerm);
+            _logger.Info("Searching tasks: {SearchTerm}", searchTerm);
             return await _taskRepository.SearchAsync(searchTerm);
         }
 

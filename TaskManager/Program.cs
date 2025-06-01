@@ -1,11 +1,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using TaskManagement.Data;
 using TaskManagement.Services;
 using TaskManagement.Repositories;
 using TaskManagement.Forms;
+using NLog;
+using NLog.Extensions.Hosting;
 
 namespace TaskManagement
 {
@@ -31,6 +32,7 @@ namespace TaskManagement
 
         static IHostBuilder CreateHostBuilder() =>
             Host.CreateDefaultBuilder()
+                .UseNLog() // Добавляем NLog
                 .ConfigureServices((context, services) =>
                 {
                     // Database
@@ -46,13 +48,6 @@ namespace TaskManagement
                     // Forms
                     services.AddTransient<MainForm>();
                     services.AddTransient<TaskEditForm>();
-
-                    // Logging
-                    services.AddLogging(builder =>
-                    {
-                        builder.AddConsole();
-                        builder.AddDebug();
-                    });
                 });
     }
 }

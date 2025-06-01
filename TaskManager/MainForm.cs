@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using NLog;
 using TaskManagement.Models;
 using TaskManagement.Services;
 
@@ -7,8 +7,8 @@ namespace TaskManagement.Forms
     public partial class MainForm : Form
     {
         private readonly ITaskService _taskService;
-        private readonly ILogger<MainForm> _logger;
         private readonly TaskEditForm _taskEditForm;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         private TextBox txtNewTask;
         private ComboBox cbPriority;
@@ -20,10 +20,9 @@ namespace TaskManagement.Forms
         private ListView lvTasks;
         private Label lblStats;
 
-        public MainForm(ITaskService taskService, ILogger<MainForm> logger, TaskEditForm taskEditForm)
+        public MainForm(ITaskService taskService, TaskEditForm taskEditForm)
         {
             _taskService = taskService;
-            _logger = logger;
             _taskEditForm = taskEditForm;
             InitializeComponent();
             LoadTasksAsync();
@@ -31,7 +30,7 @@ namespace TaskManagement.Forms
 
         private void InitializeComponent()
         {
-            this.Text = "Управление задачами";
+            this.Text = "Управление задачами - NLog";
             this.Size = new Size(800, 600);
             this.StartPosition = FormStartPosition.CenterScreen;
 
@@ -172,11 +171,11 @@ namespace TaskManagement.Forms
                 cbPriority.SelectedIndex = 1;
                 await LoadTasksAsync();
 
-                _logger.LogInformation("Task added successfully");
+                _logger.Info("Task added successfully from UI");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error adding task");
+                _logger.Error(ex, "Error adding task from UI");
                 MessageBox.Show($"Ошибка при добавлении задачи: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -202,7 +201,7 @@ namespace TaskManagement.Forms
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error editing task");
+                _logger.Error(ex, "Error editing task from UI");
                 MessageBox.Show($"Ошибка при редактировании задачи: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -224,12 +223,12 @@ namespace TaskManagement.Forms
                     await _taskService.DeleteTaskAsync(taskId);
                     await LoadTasksAsync();
 
-                    _logger.LogInformation("Task deleted successfully");
+                    _logger.Info("Task deleted successfully from UI");
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error deleting task");
+                _logger.Error(ex, "Error deleting task from UI");
                 MessageBox.Show($"Ошибка при удалении задачи: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -246,11 +245,11 @@ namespace TaskManagement.Forms
                 await _taskService.ToggleTaskCompletionAsync(taskId);
                 await LoadTasksAsync();
 
-                _logger.LogInformation("Task completion toggled");
+                _logger.Info("Task completion toggled from UI");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error toggling task completion");
+                _logger.Error(ex, "Error toggling task completion from UI");
                 MessageBox.Show($"Ошибка при изменении статуса задачи: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -316,7 +315,7 @@ namespace TaskManagement.Forms
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error loading tasks");
+                _logger.Error(ex, "Error loading tasks in UI");
                 MessageBox.Show($"Ошибка при загрузке задач: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -331,7 +330,7 @@ namespace TaskManagement.Forms
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error updating stats");
+                _logger.Error(ex, "Error updating stats in UI");
             }
         }
 

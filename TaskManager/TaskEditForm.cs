@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using NLog;
 using TaskManagement.Models;
 using TaskManagement.Services;
 
@@ -7,7 +7,7 @@ namespace TaskManagement.Forms
     public partial class TaskEditForm : Form
     {
         private readonly ITaskService _taskService;
-        private readonly ILogger<TaskEditForm> _logger;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private TaskItem? _currentTask;
 
         private TextBox txtTitle;
@@ -17,10 +17,9 @@ namespace TaskManagement.Forms
         private Button btnSave;
         private Button btnCancel;
 
-        public TaskEditForm(ITaskService taskService, ILogger<TaskEditForm> logger)
+        public TaskEditForm(ITaskService taskService)
         {
             _taskService = taskService;
-            _logger = logger;
             InitializeComponent();
         }
 
@@ -149,12 +148,12 @@ namespace TaskManagement.Forms
                         chkCompleted.Checked
                     );
 
-                    _logger.LogInformation("Task updated successfully: {TaskId}", _currentTask.Id);
+                    _logger.Info("Task updated successfully from edit form: {TaskId}", _currentTask.Id);
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error saving task");
+                _logger.Error(ex, "Error saving task from edit form");
                 MessageBox.Show($"Ошибка при сохранении задачи: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.DialogResult = DialogResult.None;
             }
