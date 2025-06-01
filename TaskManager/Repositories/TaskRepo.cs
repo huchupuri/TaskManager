@@ -19,14 +19,14 @@ namespace TaskManagement.Repositories
         {
             try
             {
-                _logger.Info("Retrieving all tasks from database");
+                _logger.Info("полчение задач из бд");
                 return await _context.Tasks
                     .OrderByDescending(t => t.CreatedAt)
                     .ToListAsync();
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Error retrieving all tasks");
+                _logger.Error(ex, "ошибка получения задач");
                 throw;
             }
         }
@@ -35,12 +35,12 @@ namespace TaskManagement.Repositories
         {
             try
             {
-                _logger.Info("Retrieving task with ID: {TaskId}", id);
+                _logger.Info("получени езадачи с определнным ID", id);
                 return await _context.Tasks.FindAsync(id);
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Error retrieving task with ID: {TaskId}", id);
+                _logger.Error(ex, "ошибка при получени задачи с определнным ID", id);
                 throw;
             }
         }
@@ -49,15 +49,15 @@ namespace TaskManagement.Repositories
         {
             try
             {
-                _logger.Info("Adding new task: {TaskTitle}", task.Title);
+                _logger.Info($"получение новой задачи", task.Title);
                 _context.Tasks.Add(task);
                 await _context.SaveChangesAsync();
-                _logger.Info("Task added successfully with ID: {TaskId}", task.Id);
+                _logger.Info($"успешно добавлена задача", task.Id);
                 return task;
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Error adding task: {TaskTitle}", task.Title);
+                _logger.Error(ex, $"ошбика добавления задачи {task.Title}", task.Title);
                 throw;
             }
         }
@@ -66,16 +66,15 @@ namespace TaskManagement.Repositories
         {
             try
             {
-                _logger.Info("Updating task with ID: {TaskId}", task.Id);
                 task.UpdatedAt = DateTime.Now;
                 _context.Tasks.Update(task);
                 await _context.SaveChangesAsync();
-                _logger.Info("Task updated successfully: {TaskId}", task.Id);
+                _logger.Info($"задача успешно обновлена: {task.Id}");
                 return task;
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Error updating task with ID: {TaskId}", task.Id);
+                _logger.Error(ex, $"ОШИБКА добавления задачи: {task.Id}");
                 throw;
             }
         }
@@ -84,22 +83,21 @@ namespace TaskManagement.Repositories
         {
             try
             {
-                _logger.Info("Deleting task with ID: {TaskId}", id);
+                _logger.Info("удаление задачи", id);
                 var task = await _context.Tasks.FindAsync(id);
                 if (task == null)
                 {
-                    _logger.Warn("Task with ID {TaskId} not found for deletion", id);
+                    _logger.Warn("задача не найдена", id);
                     return false;
                 }
 
                 _context.Tasks.Remove(task);
                 await _context.SaveChangesAsync();
-                _logger.Info("Task deleted successfully: {TaskId}", id);
                 return true;
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Error deleting task with ID: {TaskId}", id);
+                _logger.Error(ex, "ошибка удаления задачи");
                 throw;
             }
         }

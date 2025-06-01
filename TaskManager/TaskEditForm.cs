@@ -55,7 +55,6 @@ namespace TaskManagement.Forms
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Error saving task from edit form");
                 MessageBox.Show($"Ошибка при сохранении задачи: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.DialogResult = DialogResult.None;
             }

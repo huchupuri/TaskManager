@@ -16,13 +16,13 @@ namespace TaskManagement.Services
 
         public async Task<IEnumerable<TaskItem>> GetAllTasksAsync()
         {
-            _logger.Info("Getting all tasks");
+            _logger.Info("получение всех задач");
             return await _taskRepository.GetAllAsync();
         }
 
         public async Task<TaskItem?> GetTaskByIdAsync(int id)
         {
-            _logger.Info("Getting task by ID: {TaskId}", id);
+            _logger.Info("получение задачи", id);
             return await _taskRepository.GetByIdAsync(id);
         }
 
@@ -30,10 +30,10 @@ namespace TaskManagement.Services
         {
             if (string.IsNullOrWhiteSpace(title))
             {
-                throw new ArgumentException("Task title cannot be empty", nameof(title));
+                throw new ArgumentException("заголовок не может быть пустым", nameof(title));
             }
 
-            _logger.Info("Creating new task: {TaskTitle}", title);
+            _logger.Info("создание нвоой задачи", title);
 
             var task = new TaskItem
             {
@@ -50,15 +50,15 @@ namespace TaskManagement.Services
         {
             if (string.IsNullOrWhiteSpace(title))
             {
-                throw new ArgumentException("Task title cannot be empty", nameof(title));
+                throw new ArgumentException("заголовок не может быть пустым", nameof(title));
             }
 
-            _logger.Info("Updating task: {TaskId}", id);
+            _logger.Info("обновить задачу", id);
 
             var existingTask = await _taskRepository.GetByIdAsync(id);
             if (existingTask == null)
             {
-                throw new InvalidOperationException($"Task with ID {id} not found");
+                throw new InvalidOperationException($"задача {id} не найдена");
             }
 
             existingTask.Title = title.Trim();
@@ -75,13 +75,13 @@ namespace TaskManagement.Services
 
         public async Task<bool> DeleteTaskAsync(int id)
         {
-            _logger.Info("Deleting task: {TaskId}", id);
+            _logger.Info("удаление задачи", id);
             return await _taskRepository.DeleteAsync(id);
         }
 
         public async Task<bool> ToggleTaskCompletionAsync(int id)
         {
-            _logger.Info("Toggling task completion: {TaskId}", id);
+            _logger.Info("переключение статуса задачи", id);
 
             var task = await _taskRepository.GetByIdAsync(id);
             if (task == null)
@@ -101,7 +101,7 @@ namespace TaskManagement.Services
                 return await GetAllTasksAsync();
             }
 
-            _logger.Info("Searching tasks: {SearchTerm}", searchTerm);
+            _logger.Info("поиск задачи", searchTerm);
             return await _taskRepository.SearchAsync(searchTerm);
         }
 
